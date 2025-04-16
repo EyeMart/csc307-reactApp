@@ -39,15 +39,25 @@ app.get("/", (req, res) => {
     res.send("Hello World!");
 });
 
+const getNameAndJob = (name, job) =>{
+    return users["users_list"].filter(
+        (user) => (user.name === name) && (user.job) === job
+    );
+}
+
 app.get("/users", (req, res) => {
     const name = req.query.name;
-    if (name != undefined){
-        let result = findUserByName(name);
+    const job = req.query.job;
+    let result = users;
+    if (name != undefined && job != undefined){
+        result = getNameAndJob(name, job);
         result = { users_list: result};
-        res.send(result);
-    }else{
-        res.send(users);
     }
+    else if (name != undefined){
+        result = findUserByName(name);
+        result = { users_list: result};
+    }
+    res.send(result);
 });
 
 app.listen(port, () => {
@@ -97,3 +107,4 @@ const deleteUser = (id) => {
         (user) => user["id"] !== id
     );
 }
+
