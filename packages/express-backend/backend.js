@@ -85,3 +85,15 @@ const findUserByName = (name) => {
         (user) => user["name"] === name
     );
 };
+
+app.delete("/users/:id", (req, res) => {
+    const updated = deleteUser(req.params["id"]);
+    users["users_list"] = updated;
+    res.send()
+})
+
+const deleteUser = (id) => {
+    return users["users_list"].filter(
+        (user) => user["id"] !== id
+    );
+}
