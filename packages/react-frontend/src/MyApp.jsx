@@ -45,6 +45,9 @@ function MyApp() {
           setCharacters(updated); //then sets charactters to that filtered array
         }
         else console.log('resource not found');
+      })
+      .catch((error) => {
+        console.log(error);
       });
       
     }
@@ -67,6 +70,9 @@ function MyApp() {
         else return undefined;
       })
       .then((json) => {if (json) setCharacters([...characters, json])}) // appends the new person to the characters array 
+      .catch((error) => {
+        console.log(error);
+      });
       
   }
 
