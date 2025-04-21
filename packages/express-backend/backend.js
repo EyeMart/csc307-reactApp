@@ -83,14 +83,8 @@ const addUser = (user) => {
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
-    //ensures that the person added had both a name and job 
-    if (userToAdd.name && userToAdd.job){
-        addUser(userToAdd);
-        res.status(201).send(userToAdd);
-    }
-    else{
-        res.status(400).send();
-    }
+    addUser(userToAdd);
+    res.status(201).send(userToAdd);
 
 });
 
