@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 
+/* This file deals inputs to update the table */
+
 function Form(props){
+    //state details 
     const [person, setPerson] = useState({
         name: "",
         job: ""
     });
 
+    // when called, the name and value passed are called with setPerson
     function handleChange(event){
         const {name, value} = event.target;
-        if(name === "job")
-            setPerson({name: person["name"], job: value});
+        // if the event name is "job", set the 
+        if(name === "job") setPerson({name: person["name"], job: value});
+
         else setPerson({name: value, job: person["job"]});
     }
 
@@ -28,7 +33,7 @@ function Form(props){
                 value={person.name}
                 onChange={handleChange}
             />
-            <label htmlFor="job">Job</label>
+            <label htmlFor="job"/*label adds a label to the next input*/>Job</label>
             <input
                 type="text"
                 name="job"
