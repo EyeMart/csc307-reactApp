@@ -13,15 +13,6 @@ function MyApp() {
       return promise
     }
 
-    //function used by the button in ./Table
-    //filters the current characters array to remove the passed index
-    function removeOneCharacter(index){
-        const updated = characters.filter((character, i) => {
-            return i !== index;
-        });
-        setCharacters(updated); //then sets charactters to that filtered array
-    }
-
     useEffect(() => {
       fetchUsers()
       .then((res) => res.json())
@@ -30,6 +21,33 @@ function MyApp() {
         console.log(error);
       });
     }, []);
+
+    function removeUser(id){
+      const promise = fetch(`http://localhost:8000/users/${id}`, {
+        method: "DELETE",
+        headers:{
+          "Content-Type": "application/json"
+        },
+      });
+      return promise;
+    }
+
+    //function used by the button in ./Table
+    //filters the current characters array to remove the passed index
+    function removeOneCharacter(index){
+      const id = characters[index].id;
+      removeUser(id)
+      .then((res) => {
+        if (res.status === 204){
+          const updated = characters.filter((character) => {
+            return character.id !== id;
+          });
+          setCharacters(updated); //then sets charactters to that filtered array
+        }
+        else console.log('resource not found');
+      });
+      
+    }
 
     function postUser(person){
       const promise = fetch("http://localhost:8000/users", {
@@ -44,10 +62,12 @@ function MyApp() {
 
     function updateList(person){ //called whenever the form is submitted
       postUser(person)
-      .then(setCharacters([...characters, person])) // appends the new person to the characters array 
-      .catch((error) => {
-        console.log(error);
-      });
+      .then((res) => {
+        if (res.status === 201) return res.json();
+        else return undefined;
+      })
+      .then((json) => {if (json) setCharacters([...characters, json])}) // appends the new person to the characters array 
+      
   }
 
     return (

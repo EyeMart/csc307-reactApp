@@ -73,15 +73,24 @@ app.listen(port, () => {
 });
 
 const addUser = (user) => {
+    let id = Math.floor(Math.random() * 1000000);
+    user.id = `${id}`; //gives the user a 6 digit id before adding them
+
     users["users_list"].push(user);
+
     return user;
 };
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
-    console.log('received :', userToAdd);
-    addUser(userToAdd);
-    res.send();
+    //ensures that the person added had both a name and job 
+    if (userToAdd.name && userToAdd.job){
+        addUser(userToAdd);
+        res.status(201).send(userToAdd);
+    }
+    else{
+        res.status(400).send();
+    }
 
 });
 
@@ -99,9 +108,16 @@ app.get("/users/:id", (req, res) => {
 });
 
 app.delete("/users/:id", (req, res) => {
-    const updated = deleteUser(req.params["id"]);
-    users["users_list"] = updated;
-    res.send()
+    const id = req.params["id"];
+    let result = findUserById(id);
+    if (result === undefined){
+        res.status(404).send("result not found");
+    }
+    else{
+        const updated = deleteUser(req.params["id"]);
+        users["users_list"] = updated;
+        res.status(204).send()
+    }
 })
 
 const deleteUser = (id) => {
