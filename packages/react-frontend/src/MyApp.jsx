@@ -35,12 +35,12 @@ function MyApp() {
     //function used by the button in ./Table
     //filters the current characters array to remove the passed index
     function removeOneCharacter(index){
-      const id = characters[index].id;
+      const id = characters[index]._id;
       removeUser(id)
       .then((res) => {
         if (res.status === 204){
           const updated = characters.filter((character) => {
-            return character.id !== id;
+            return character._id !== id;
           });
           setCharacters(updated); //then sets charactters to that filtered array
         }
